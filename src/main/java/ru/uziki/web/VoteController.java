@@ -1,7 +1,5 @@
 package ru.uziki.web;
 
-import ru.uziki.model.Restaurant;
-import ru.uziki.model.User;
 import ru.uziki.model.Vote;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
