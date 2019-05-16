@@ -6,10 +6,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.uziki.AuthorizedUser;
 import ru.uziki.model.User;
-import ru.uziki.repository.UserRepository;
+import ru.uziki.repository.User.UserRepository;
 
-@Service("userService")
-public class UserService implements UserDetailsService {
+@Service("securityService")
+public class SecurityService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 

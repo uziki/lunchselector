@@ -7,7 +7,7 @@
 
     <http use-expressions="true" name="restSecurityFilterChain" create-session="stateless">
         <http-basic/>
-        <intercept-url pattern="/votes/**" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/restaurants/**/dishes" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/**" access="isAuthenticated()"/>
         <csrf disabled="true"/>
     </http>
@@ -15,7 +15,7 @@
     <beans:bean name="noopEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder"/>
 
     <authentication-manager>
-        <authentication-provider user-service-ref="userService">
+        <authentication-provider user-service-ref="securityService">
             <password-encoder ref="noopEncoder"/>
         </authentication-provider>
     </authentication-manager>

@@ -1,4 +1,4 @@
-package ru.uziki.repository;
+package ru.uziki.repository.User;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
