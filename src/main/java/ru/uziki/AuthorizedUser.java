@@ -1,77 +1,28 @@
 package ru.uziki;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import ru.uziki.model.User;
 
-import java.util.Collection;
 
-import static java.util.Objects.requireNonNull;
-
-
-public class AuthorizedUser implements UserDetails {
+public class AuthorizedUser extends org.springframework.security.core.userdetails.User {
     private static final long serialVersionUID = 1L;
 
-
-    protected User user;
+    private User user;
 
     public AuthorizedUser(User user) {
+        super(user.getEmail(), user.getPassword(), user.isEnabled(), true, true, true, user.getRoles());
         this.user = user;
     }
 
-    public static AuthorizedUser safeGet() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
-            return null;
-        }
-        Object user = authentication.getPrincipal();
-        return (user instanceof AuthorizedUser) ? (AuthorizedUser) user : null;
+    public int getId() {
+        return user.getId();
     }
 
-    public static AuthorizedUser get() {
-        AuthorizedUser user = safeGet();
-        requireNonNull(user, "No authorized user found");
+    public User getUser() {
         return user;
     }
 
-    public static int id() {
-        return get().user.getId();
-    }
-
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return user.getRoles();
-    }
-
-    @Override
-    public String getPassword() {
-        return user.getPassword();
-    }
-
-    @Override
-    public String getUsername() {
-        return user.getName();
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return user.isEnabled();
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return user.isEnabled();
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return user.isEnabled();
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return user.isEnabled();
+    public String toString() {
+        return user.toString();
     }
 }
