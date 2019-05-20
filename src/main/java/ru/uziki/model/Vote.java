@@ -3,14 +3,14 @@ package ru.uziki.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "votes")
 public class Vote extends AbstractBaseEntity {
     @Column(name = "vote_date", nullable = false)
     @NotNull
-    private LocalDateTime dateTime;
+    private LocalDate date;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -25,24 +25,24 @@ public class Vote extends AbstractBaseEntity {
     public Vote() {
     }
 
-    public Vote(LocalDateTime dateTime, User user, Restaurant restaurant) {
-        this(null, dateTime, user, restaurant);
+    public Vote(LocalDate date, User user, Restaurant restaurant) {
+        this(null, date, user, restaurant);
     }
 
-    public Vote(Integer id, LocalDateTime dateTime, User user, Restaurant restaurant) {
+    public Vote(Integer id, LocalDate date, User user, Restaurant restaurant) {
         super(id);
-        this.dateTime = dateTime;
+        this.date = date;
         this.user = user;
         this.restaurant = restaurant;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDate getDate() {
+        return date;
     }
 
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public User getUser() {
@@ -65,7 +65,7 @@ public class Vote extends AbstractBaseEntity {
     public String toString() {
         return "Vote{" +
                 "id=" + id +
-                ", dateTime=" + dateTime +
+                ", date=" + date +
                 ", user=" + user.getName() + '\'' +
                 ", restaurant=" + restaurant.getName() +
                 '}';
