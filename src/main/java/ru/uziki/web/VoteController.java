@@ -10,6 +10,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.uziki.AuthorizedUser;
 import ru.uziki.model.Vote;
 import ru.uziki.repository.Restaurant.RestaurantRepository;
+import ru.uziki.repository.User.UserRepository;
 import ru.uziki.repository.Vote.VoteRepository;
 
 import java.net.URI;
@@ -28,6 +29,9 @@ public class VoteController {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @GetMapping
     public List<Vote> getAll() {
         return voteRepository.getAll();
@@ -39,14 +43,20 @@ public class VoteController {
     }
 
     @PostMapping(value = "/{restId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Vote> save(@AuthenticationPrincipal AuthorizedUser authorizedUser, @RequestBody Vote vote, @PathVariable int restId) {
+    public ResponseEntity<Vote> save(@AuthenticationPrincipal AuthorizedUser authorizedUser, @PathVariable int restId) {
         LocalDate now = LocalDate.now();
         Vote checkVote = voteRepository.get(authorizedUser.getId(), now);
-        if (checkVote != null && LocalTime.now().isAfter(LocalTime.parse("11:00")) ) {
+        if (checkVote == null) {
+            Vote vote = new Vote();
+            vote.setRestaurant(restaurantRepository.get(restId));
+            vote.setUser(userRepository.get(authorizedUser.getId()));
+            vote.setDate(now);
+            return new ResponseEntity<>(voteRepository.save(vote), HttpStatus.OK);
+        } else if (LocalTime.now().isAfter(LocalTime.parse("11:00")) ) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
             checkVote.setRestaurant(restaurantRepository.get(restId));
-            return new ResponseEntity<>(voteRepository.save(vote), HttpStatus.OK);
+            return new ResponseEntity<>(voteRepository.save(checkVote), HttpStatus.OK);
         }
     }
 }
